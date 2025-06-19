@@ -1,0 +1,71 @@
+<LoginScreen>:
+    MDBoxLayout:
+        orientation: 'vertical'
+        size_hint_y: 0.6
+        pos_hint: {"center_y": 0.4}
+
+        MDTextField:
+            id: nameInput
+            hint_text: "Name:"
+            multiline: False
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+            size_hint_x: 0.5
+
+        MDTextField:
+            id: passwordInput
+            hint_text: "Password:"
+            multiline: False
+            password: True
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+            size_hint_x: 0.5
+
+        AnchorLayout:
+            size_hint_y: 0.2
+            MDRaisedButton:
+                text: "Login"
+                size_hint: None, None
+                size: 150, 50
+                on_release:
+                    root.validateCreds(nameInput.text, passwordInput.text)
+
+
+<HomeScreen>:
+    MDBoxLayout:
+        orientation: 'vertical'
+        size_hint: .4, .5
+        pos_hint: {"center_x": .7, "center_y": .75}
+        spacing: 100
+
+        MDRaisedButton:
+            id: EODButton
+            text: "End OF Day Check Out"
+            size_hint_x: 1
+            size_hint_y: None
+            height: 100
+            pos_hint: {"center_x": .5, "center_y": .5}
+            on_release: root.changeToEOD()
+
+        MDRaisedButton:
+            id: ExtCareButton
+            text: "Extended Care"
+            size_hint_x: 1
+            size_hint_y: None
+            height: 100
+            pos_hint: {"center_x": .5, "center_y": .5}
+
+        
+
+<EODScreen>:
+    MDTextField:
+        id: nameInput
+        hint_text: "Enter Lastname:"
+        helper_text: "Press Search when ready"
+        helper_text_mode: "on_focus"
+        icon_right: "account-search"
+        pos_hint: {'center_x': 0.45, 'center_y': 0.5}
+        size_hint_x: 0.45
+
+    MDRaisedButton:
+        text: "Search"
+        pos_hint: {'center_x': 0.74, 'center_y': 0.5}
+        on_release: root.showData()

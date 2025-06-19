@@ -1,0 +1,23 @@
+# Python cache
+__pycache__/
+*.pyc
+
+# Virtual envs
+venv/
+KivEnv/
+
+# Secrets
+creds.json
+SRDCPasswords.xlsx
+SignedOutCampers.xlsx
+
+# Scratch/test files
+test.py
+test.kv
+main.py
+Kivy_icons.py
+DisplayNames.py
+
+
+# IDE config
+.vscode/
