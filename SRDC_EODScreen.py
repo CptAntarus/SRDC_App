@@ -1,75 +1,56 @@
 import pandas as pd
-import gspread
 from oauth2client.service_account import ServiceAccountCredentials
-from kivymd.uix.label import MDLabel
 from kivymd.uix.screen import Screen
-from kivymd.uix.button import MDRaisedButton, MDFlatButton
+from kivymd.uix.list import OneLineListItem
 from kivymd.uix.textfield import MDTextField
-from kivymd.uix.dialog import MDDialog
-from datetime import datetime
+from SRDC_GSM import GlobalScreenManager, GSM
+from kivy.clock import Clock
 
 
 
 class EODScreen(Screen):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+    def on_enter(self):
+        self.ExcelList = pd.read_excel("C:/VS_Code/Python/Kivy_Testing/SRDCPasswords.xlsx")
+        self.matchingLastNames = self.ids.matchingLastNames
+        self.ids.nameInput.bind(text=self.onTextSearch)
+        self.matchingLastNames.clear_widgets()
+        Clock.schedule_once(self.setFocus,0.1)
 
-        # self.passwords = pd.read_excel("SRDCPasswords.xlsx")
-        self.passwords = pd.read_excel("C:/VS_Code/Python/Kivy_Testing/SRDCPasswords.xlsx")
-        self.selectedCamper = None
+    def setFocus(self, dt):
+        self.ids.nameInput.focus = True
+
+    def onTextSearch(self, instance, value):
+        self.updateList(value)
+
+    def updateList(self, searchText):
+        container = self.ids.matchingLastNames
+        container.clear_widgets()
+        addedNames = set()
+
+        for index, row in self.ExcelList.iterrows():
+            name = str(row["LastName"]).strip()
+            if searchText.lower() in name.lower() and name.lower() not in addedNames:
+                item = OneLineListItem(text=name)
+                item.bind(on_release=lambda instance, name=name: self.findPassword(name))
+
+                container.add_widget(item)
+                addedNames.add(name.lower())
 
     # Shows Output Based on search input
-    def showData(self):
-        userInput = self.ids.nameInput.text.strip().lower()
-        output_string = 'Name Not Found'
-
-        if userInput == "":
-            output_string = 'No Name Entered'
-            closeButton = MDFlatButton(text='Close', on_release=self.closeDialog)
-            self.dialog = MDDialog(title='Password:',text=output_string,
-                            buttons=[closeButton])
-
+    def findPassword(self, familyName=None):
+        if familyName:
+            userInput = familyName.strip().lower()
         else:
-            for index, row in self.passwords.iterrows():
-                if str(row['LastNames']).strip().lower() == userInput:
-                    output_string = str(row['Passwords'])
-                    self.selectedCamper=row
+            userInput = self.ids.nameInput.text.strip().lower()
 
-                    closeButton = MDFlatButton(text='Close', on_release=self.closeDialog)
-                    addToList_button = MDFlatButton(text='Add', on_release=self.addToList)
-                    self.dialog = MDDialog(title='Password:',text=output_string,
-                            buttons=[closeButton, addToList_button])
-                    break
-                else:
-                    closeButton = MDFlatButton(text='Close', on_release=self.closeDialog)
-                    self.dialog = MDDialog(title='Password:',text=output_string,
-                            buttons=[closeButton])
-        
-        self.dialog.open()
-        self.ids.nameInput.text = ''
+        for index, row in self.ExcelList.iterrows():
+            if str(row['LastName']).strip().lower() == userInput.lower():
+                familyPassowrd = str(row['Passwords'])
+                self.changeScreen(familyName, familyPassowrd)
+                break
 
-    # Closes Dialog box
-    def closeDialog(self, obj):
-        self.dialog.dismiss()
-
-    # Push Name&Password to GoogleDoc
-    def addToList(self, obj):
-        if self.selectedCamper is not None:
-            timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
-            # Google Sheets API setup
-            scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-            creds = ServiceAccountCredentials.from_json_keyfile_name("C:\VS_Code\Python\Kivy_Testing\creds.json", scope)
-            client = gspread.authorize(creds)
-
-            # Open the spreadsheet and sheet
-            sheet = client.open("SignedOutCampers").worksheet("Campers")
-
-            # Append the data
-            sheet.append_row([
-                str(self.selectedCamper['LastNames']),
-                str(self.selectedCamper['Passwords']),
-                timestamp
-            ])
-
-        self.dialog.dismiss()
+    # Save Globals and switch to selction screen
+    def changeScreen(self, familyName, familyPassword):
+        GlobalScreenManager.FAMILY_NAME = str(f"Family:   {familyName}")
+        GlobalScreenManager.FAMILY_PASSWORD = str(f"Password:   {familyPassword}")
+        GSM().switchScreen('selectionScreen')

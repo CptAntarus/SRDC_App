@@ -25,15 +25,19 @@
                 text: "Login"
                 size_hint: None, None
                 size: 150, 50
-                on_release:
-                    root.validateCreds(nameInput.text, passwordInput.text)
+                on_release: root.validateCreds(nameInput.text, passwordInput.text)
+
 
 
 <HomeScreen>:
+    MDTopAppBar:
+        left_action_items: [["arrow-left", lambda y: app.root.backButton(y)]]
+        pos_hint: {"top": 1}
+
     MDBoxLayout:
         orientation: 'vertical'
         size_hint: .4, .5
-        pos_hint: {"center_x": .7, "center_y": .75}
+        pos_hint: {"center_x":.7, "center_y":.75}
         spacing: 100
 
         MDRaisedButton:
@@ -42,30 +46,81 @@
             size_hint_x: 1
             size_hint_y: None
             height: 100
-            pos_hint: {"center_x": .5, "center_y": .5}
-            on_release: root.changeToEOD()
+            pos_hint: {"center_x":.5, "center_y":.5}
+            on_release: app.root.switchScreen('EOD')
 
         MDRaisedButton:
             id: ExtCareButton
             text: "Extended Care"
-            size_hint_x: 1
-            size_hint_y: None
+            size_hint: 1,None
             height: 100
-            pos_hint: {"center_x": .5, "center_y": .5}
+            pos_hint: {"center_x":.5, "center_y":.5}
+            on_release:
 
-        
+
 
 <EODScreen>:
-    MDTextField:
-        id: nameInput
-        hint_text: "Enter Lastname:"
-        helper_text: "Press Search when ready"
-        helper_text_mode: "on_focus"
-        icon_right: "account-search"
-        pos_hint: {'center_x': 0.45, 'center_y': 0.5}
-        size_hint_x: 0.45
+    MDTopAppBar:
+        title: "Camper Signout"
+        left_action_items: [["arrow-left", lambda y: app.root.backButton(y)]]
+        pos_hint: {"top": 1}
 
-    MDRaisedButton:
-        text: "Search"
-        pos_hint: {'center_x': 0.74, 'center_y': 0.5}
-        on_release: root.showData()
+
+    MDFloatLayout:
+        MDTextField:
+            id: nameInput
+            focus: True
+            hint_text: "Enter Lastname:"
+            helper_text_mode: "on_focus"
+            icon_right: "death-star-variant" #account-search
+            pos_hint: {'center_x':.5, 'center_y':.6}
+            size_hint: .5,.1
+            # on_text_validate: root.findPassword()
+
+        ScrollView:
+            size_hint: 0.8,0.3
+            pos_hint: {"center_x":.5, "center_y":.35}
+            MDList:
+                id: matchingLastNames
+
+<SelectionScreen>:
+    MDTopAppBar:
+        title: "Cemper Selection"
+        left_action_items: [["arrow-left", lambda y: app.root.backButton(y)]]
+        pos_hint: {"top": 1}
+
+    MDFloatLayout:
+        padding: "10dp"
+        spacing: "10dp"
+
+        MDLabel:
+            id: familyName
+            size_hint: .2,.2
+            pos_hint: {"center_x":.25,"center_y":.85}
+            text: ""
+
+        MDLabel:
+            id: familyPassword  # Add pswd in .py
+            size_hint: .2,.2
+            pos_hint: {"center_x":.25,"center_y":.8}
+            text: ""
+
+        ScrollView:
+            size_hint: 0.8,0.3
+            pos_hint: {"center_x":.5, "center_y":.5}
+            MDList:
+                id: familyList
+
+        #     MDCheckbox:
+        #         id: checkbox
+        #         size_hint: None, None
+        #         size: "48dp", "48dp"
+        #         pos_hint: {"center_y": 0.5}
+        #         on_active: app.update_selected("Dylan", self.active)
+
+        MDRaisedButton:
+            text: "Add Selected"
+            size_hint_y: None
+            height: "48dp"
+            pos_hint: {"center_x": 0.5, "center_y":.1}
+            on_release: app.add_selected()
