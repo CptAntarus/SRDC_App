@@ -51,6 +51,6 @@ class EODScreen(Screen):
 
     # Save Globals and switch to selction screen
     def changeScreen(self, familyName, familyPassword):
-        GlobalScreenManager.FAMILY_NAME = str(f"Family:   {familyName}")
-        GlobalScreenManager.FAMILY_PASSWORD = str(f"Password:   {familyPassword}")
+        GlobalScreenManager.FAMILY_NAME = familyName.strip() #str(f"Family:   {familyName}")
+        GlobalScreenManager.FAMILY_PASSWORD = familyPassword.strip() #str(f"Password:   {familyPassword}")
         GSM().switchScreen('selectionScreen')

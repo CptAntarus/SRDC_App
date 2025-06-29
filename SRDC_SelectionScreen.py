@@ -1,12 +1,13 @@
 import pandas as pd
 import gspread
-from kivymd.app import MDApp
-from kivymd.uix.list import OneLineListItem
+from kivymd.uix.list import OneLineAvatarIconListItem, IRightBodyTouch
 from kivymd.uix.selectioncontrol import MDCheckbox
 from kivy.uix.screenmanager import Screen
 from kivy.clock import Clock
 from SRDC_GSM import GlobalScreenManager
 
+class RightCheckbox(IRightBodyTouch, MDCheckbox):
+    pass
 
 class SelectionScreen(Screen):
     def on_enter(self):
@@ -16,29 +17,32 @@ class SelectionScreen(Screen):
     def delayedInit(self, dt):
         self.ExcelList = pd.read_excel("C:/VS_Code/Python/Kivy_Testing/SRDCPasswords.xlsx")
 
-        self.ids.familyName.text = GlobalScreenManager.FAMILY_NAME or ""
-        self.ids.familyPassword.text = GlobalScreenManager.FAMILY_PASSWORD or ""
+        print(self.ExcelList)
+
+        self.ids.familyName.text = GlobalScreenManager.FAMILY_NAME
+        self.ids.familyPassword.text = GlobalScreenManager.FAMILY_PASSWORD
 
         self.showOptions()
-
-
 
     def showOptions(self):
         container = self.ids.familyList
         container.clear_widgets()
+        tempFirstNames = []
 
+        # Create simlified list of first names
         for i, row in self.ExcelList.iterrows():
-            LName = str(row["LastName"]).strip()
-            if LName.lower() in (GlobalScreenManager.FAMILY_NAME or "").lower():
-                first_name = str(row["FirstName"]).strip()
-                if not first_name:
-                    first_name = "(No Name)"
+            tempLName = str(row["LastName"]).strip().lower()
+            if tempLName.lower() == GlobalScreenManager.FAMILY_NAME.lower():
+                firstNames = str(row["FirstName"]).strip()
+                tempFirstNames.append(str(firstNames))
 
-                item = OneLineListItem(text=first_name)
+        for name in tempFirstNames:
+            item = OneLineAvatarIconListItem(text=name)
+            checkbox = RightCheckbox()
+            item.add_widget(checkbox)
+            container.add_widget(item)
 
-                checkbox = MDCheckbox(size_hint=(None,None), size=("24dp", "24dp"))
-                item.add_widget(checkbox)
-                container.add_widget(item)
+  
 
 
     # # Push Name&Password to GoogleDoc
