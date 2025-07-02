@@ -20,13 +20,7 @@ class GlobalScreenManager(ScreenManager):
         self.current = newScren
 
     def backButton(self, *args):
-        if GlobalScreenManager.SCREEN_HIST:
-            previousScreen = GlobalScreenManager.SCREEN_HIST.pop()
-
-            if previousScreen == 'EOD':
-                tempScreen = self.get_screen('EOD')
-                tempScreen.ids.nameInput.text=''
-            self.current = previousScreen
+        self.current = GlobalScreenManager.SCREEN_HIST.pop()
 
     def reset(self):
         GlobalScreenManager.SCREEN_HIST.clear()

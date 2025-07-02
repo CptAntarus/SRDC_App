@@ -14,6 +14,7 @@ class EODScreen(Screen):
         self.matchingLastNames = self.ids.matchingLastNames
         self.ids.nameInput.bind(text=self.onTextSearch)
         self.matchingLastNames.clear_widgets()
+        self.ids.nameInput.text = ""
         Clock.schedule_once(self.setFocus,0.1)
 
     def setFocus(self, dt):
