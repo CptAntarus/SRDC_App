@@ -1,3 +1,4 @@
+from kivymd.app import MDApp
 from kivy.uix.screenmanager import Screen
 from kivymd.uix.snackbar import MDSnackbar
 from kivymd.uix.label import MDLabel
@@ -6,6 +7,7 @@ from SRDC_GSM import GlobalScreenManager, GSM
 class LoginScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.themeStatus = "Dark"
         print("[LoginScreen] Initialized")
 
     def on_enter(self):
@@ -33,3 +35,10 @@ class LoginScreen(Screen):
             ).open()
             self.ids.nameInput.text = ""
             self.ids.passwordInput.text = ""
+    
+    def toggleLightDark(self):
+        if self.themeStatus == "Dark":
+            self.themeStatus = "Light"
+        else:
+            self.themeStatus = "Dark"
+        MDApp.get_running_app().theme_cls.theme_style = self.themeStatus

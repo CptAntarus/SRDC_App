@@ -1,4 +1,11 @@
 <LoginScreen>:
+    MDFloatLayout:
+        MDIconButton:
+            id: LightDarkBtn
+            icon: "white-balance-sunny"
+            pos_hint: {"center_x":.9, "center_y":.9}
+            on_release: root.toggleLightDark()
+
     MDBoxLayout:
         orientation: 'vertical'
         size_hint_y: 0.6
@@ -35,28 +42,29 @@
         right_action_items: [["home", lambda x: app.root.switchScreen('home')]]
         pos_hint: {"top": 1}
 
-    MDBoxLayout:
-        orientation: 'vertical'
-        size_hint: .4, .5
-        pos_hint: {"center_x":.7, "center_y":.75}
-        spacing: 100
-
+    FloatLayout:
         MDRaisedButton:
             id: EODButton
             text: "End Of Day Sign Out"
-            size_hint_x: 1
-            size_hint_y: None
-            height: 100
-            pos_hint: {"center_x":.5, "center_y":.5}
+            size_hint: None,None
+            pos_hint: {"center_x":.7, "center_y":.65}
             on_release: app.root.switchScreen('EOD')
 
         MDRaisedButton:
             id: ExtCareButton
             text: "Extended Care"
-            size_hint: 1,None
-            height: 100
-            pos_hint: {"center_x":.5, "center_y":.5}
+            size_hint: None,None
+            pos_hint: {"center_x":.7, "center_y":.35}
             on_release:
+
+        Image:
+            source: "images/SRDC_Logo.png" #"TheCrizzler.jfif" #"Taylor.jpg" 
+            md_bg_color: 0.1, 0.1, 0.1, 1
+            size_hint: None, None
+            size: dp(250), dp(250) #dp(350), dp(350) For the funnies
+            allow_stretch: True
+            keep_ratio: True
+            pos_hint: {"center_x": 0.25, "center_y":.3}
 
 
 

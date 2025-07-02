@@ -32,7 +32,7 @@ class SRDCApp(MDApp):
         self.sm.add_widget(SelectionScreen(name='selectionScreen'))
 
         self.theme_cls.theme_style = "Dark"
-        self.theme_cls.theme_palette = "BlueGray"
+        self.theme_cls.primary_palette = "Blue" #"Cyan" #"Green"
         self.sm.transition = NoTransition()
 
         return self.sm
