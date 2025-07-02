@@ -42,7 +42,7 @@
 
         MDRaisedButton:
             id: EODButton
-            text: "End OF Day Check Out"
+            text: "End Of Day Sign Out"
             size_hint_x: 1
             size_hint_y: None
             height: 100
@@ -83,6 +83,8 @@
             MDList:
                 id: matchingLastNames
 
+
+
 <SelectionScreen>:
     MDTopAppBar:
         title: "Cemper Selection"
@@ -122,8 +124,16 @@
                     id: familyList
 
         MDRaisedButton:
+            text: "Select All"
+            id: toggleAllBtn
+            size_hint: None,None
+            size: "250dp", "48dp"
+            pos_hint: {"center_x": 0.9, "center_y":.7}
+            on_release: root.selectAll()
+
+        MDRaisedButton:
             text: "Add Selected"
             size_hint: None, None
             size: "200dp", "48dp"
             pos_hint: {"center_x": 0.5, "center_y":.15}
-            on_release: #app.add_selected()
+            on_release: root.addToList()

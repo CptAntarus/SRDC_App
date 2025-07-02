@@ -1,10 +1,12 @@
 import pandas as pd
 import gspread
+from datetime import datetime
 from kivymd.uix.list import OneLineAvatarIconListItem, IRightBodyTouch
 from kivymd.uix.selectioncontrol import MDCheckbox
 from kivy.uix.screenmanager import Screen
 from kivy.clock import Clock
-from SRDC_GSM import GlobalScreenManager
+from oauth2client.service_account import ServiceAccountCredentials
+from SRDC_GSM import GlobalScreenManager, GSM
 
 class RightCheckbox(IRightBodyTouch, MDCheckbox):
     pass
@@ -12,12 +14,11 @@ class RightCheckbox(IRightBodyTouch, MDCheckbox):
 class SelectionScreen(Screen):
     def on_enter(self):
         Clock.schedule_once(self.delayedInit,0.1)
+        self.ids.toggleAllBtn.text = "Select All"
 
 
     def delayedInit(self, dt):
         self.ExcelList = pd.read_excel("C:/VS_Code/Python/Kivy_Testing/SRDCPasswords.xlsx")
-
-        print(self.ExcelList)
 
         self.ids.familyName.text = GlobalScreenManager.FAMILY_NAME
         self.ids.familyPassword.text = GlobalScreenManager.FAMILY_PASSWORD
@@ -28,41 +29,58 @@ class SelectionScreen(Screen):
         container = self.ids.familyList
         container.clear_widgets()
         tempFirstNames = []
+        self.checkboxes = []
 
         # Create simlified list of first names
-        for i, row in self.ExcelList.iterrows():
+        for _, row in self.ExcelList.iterrows():
             tempLName = str(row["LastName"]).strip().lower()
             if tempLName.lower() == GlobalScreenManager.FAMILY_NAME.lower():
-                firstNames = str(row["FirstName"]).strip()
-                tempFirstNames.append(str(firstNames))
+                firstName = str(row["FirstName"]).strip()
+                tempFirstNames.append(str(firstName))
+                self.selectedCamper = row
+                item = OneLineAvatarIconListItem(text=firstName)
+                checkbox = RightCheckbox()
+                item.add_widget(checkbox)
+                container.add_widget(item)
+                self.checkboxes.append((firstName,checkbox))
 
-        for name in tempFirstNames:
-            item = OneLineAvatarIconListItem(text=name)
-            checkbox = RightCheckbox()
-            item.add_widget(checkbox)
-            container.add_widget(item)
+    def selectAll(self):
+        anyUnchecked = any(not cb.active for _, cb in self.checkboxes)
+        for _, cb, in self.checkboxes:
+            cb.active = anyUnchecked
 
-  
-
-
+        if anyUnchecked:
+                self.ids.toggleAllBtn.text = "Deselect All"
+        else:
+            self.ids.toggleAllBtn.text = "Select All"
+                
     # # Push Name&Password to GoogleDoc
-    # def addToList(self, obj):
-    #     if self.selectedCamper is not None:
-    #         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    def addToList(self):
+        if self.selectedCamper is not None:
+            timestamp = datetime.now().strftime("%Y/%m/%d %H:%M:%S")
 
-    #         # Google Sheets API setup
-    #         scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-    #         creds = ServiceAccountCredentials.from_json_keyfile_name("C:\VS_Code\Python\Kivy_Testing\creds.json", scope)
-    #         client = gspread.authorize(creds)
+            # Google Sheets API setup
+            scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
+            creds = ServiceAccountCredentials.from_json_keyfile_name("C:\VS_Code\Python\Kivy_Testing\creds.json", scope)
+            client = gspread.authorize(creds)
 
-    #         # Open the spreadsheet and sheet
-    #         sheet = client.open("SignedOutCampers").worksheet("Campers")
+            # Open the spreadsheet and sheet
+            sheet = client.open("SignedOutCampers").worksheet("Campers")
 
-    #         # Append the data
-    #         sheet.append_row([
-    #             str(self.selectedCamper['LastNames']),
-    #             str(self.selectedCamper['Passwords']),
-    #             timestamp
-    #         ])
+            for name, checkbox in self.checkboxes:
+                if checkbox.active:
+                    match = self.ExcelList[
+                        (self.ExcelList["LastName"].str.strip().str.lower() == GlobalScreenManager.FAMILY_NAME.lower()) &
+                        (self.ExcelList["FirstName"].str.strip() == name)
+                    ]
 
-    #     self.dialog.dismiss()
+                    if not match.empty:
+                        row = match.iloc[0]
+                        sheet.append_row([
+                            str(row["FirstName"]),
+                            str(row["LastName"]),
+                            str(row["Passwords"]),
+                            timestamp
+                        ])
+
+        GSM().switchScreen("EOD")
