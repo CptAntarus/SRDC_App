@@ -35,10 +35,3 @@ class LoginScreen(Screen):
             ).open()
             self.ids.nameInput.text = ""
             self.ids.passwordInput.text = ""
-    
-    def toggleLightDark(self):
-        if self.themeStatus == "Dark":
-            self.themeStatus = "Light"
-        else:
-            self.themeStatus = "Dark"
-        MDApp.get_running_app().theme_cls.theme_style = self.themeStatus

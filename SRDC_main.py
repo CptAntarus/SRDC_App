@@ -19,6 +19,7 @@ from SRDC_LoginScreen import LoginScreen
 from SRDC_HomeScreen import HomeScreen
 from SRDC_EODScreen import EODScreen
 from SRDC_SelectionScreen import SelectionScreen
+from SRDC_EditThemeScreen import EditThemeScreen
 
 Builder.load_file("SRDC_Format.kv") # ABS PATH: C:/VS_Code/Python/Kivy_Testing/
 
@@ -30,6 +31,7 @@ class SRDCApp(MDApp):
         self.sm.add_widget(HomeScreen(name='home'))
         self.sm.add_widget(EODScreen(name='EOD'))
         self.sm.add_widget(SelectionScreen(name='selectionScreen'))
+        self.sm.add_widget(EditThemeScreen(name='editThemeScreen'))
 
         self.theme_cls.theme_style = "Dark"
         self.theme_cls.primary_palette = "Blue" #"Cyan" #"Green"
@@ -38,7 +40,7 @@ class SRDCApp(MDApp):
         return self.sm
 
     def on_start(self):
-        GSM().switchScreen('EOD')
+        GSM().switchScreen('home')
 
 
 if __name__ == "__main__":
