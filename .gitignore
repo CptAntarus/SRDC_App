@@ -8,6 +8,7 @@ KivEnv/
 
 # Secrets
 creds.json
+SRDCPasswords.json
 SRDCPasswords.xlsx
 SignedOutCampers.xlsx
 

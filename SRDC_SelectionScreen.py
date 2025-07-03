@@ -1,4 +1,3 @@
-import pandas as pd
 import gspread
 from datetime import datetime
 from kivymd.uix.list import OneLineAvatarIconListItem, IRightBodyTouch
@@ -18,7 +17,12 @@ class SelectionScreen(Screen):
 
 
     def delayedInit(self, dt):
-        self.ExcelList = pd.read_excel("C:/VS_Code/Python/Kivy_Testing/SRDCPasswords.xlsx")
+        scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
+        creds = ServiceAccountCredentials.from_json_keyfile_name("SRDCPasswords.json", scope)
+        client = gspread.authorize(creds)
+
+        sheet = client.open("SRDCPasswords").sheet1
+        self.camperData = sheet.get_all_records()
 
         self.ids.familyName.text = GlobalScreenManager.FAMILY_NAME
         self.ids.familyPassword.text = GlobalScreenManager.FAMILY_PASSWORD
@@ -28,15 +32,13 @@ class SelectionScreen(Screen):
     def showOptions(self):
         container = self.ids.familyList
         container.clear_widgets()
-        tempFirstNames = []
         self.checkboxes = []
 
         # Create simlified list of first names
-        for _, row in self.ExcelList.iterrows():
-            tempLName = str(row["LastName"]).strip().lower()
+        for row in self.camperData:
+            tempLName = str(row.get("LastName", "")).strip().lower()
             if tempLName.lower() == GlobalScreenManager.FAMILY_NAME.lower():
-                firstName = str(row["FirstName"]).strip()
-                tempFirstNames.append(str(firstName))
+                firstName = str(row.get("FirstName", "")).strip()
                 self.selectedCamper = row
                 item = OneLineAvatarIconListItem(text=firstName)
                 checkbox = RightCheckbox()
@@ -54,7 +56,7 @@ class SelectionScreen(Screen):
         else:
             self.ids.toggleAllBtn.text = "Select All"
                 
-    # # Push Name&Password to GoogleDoc
+    # Push Name&Password to GoogleDoc
     def addToList(self):
         if self.selectedCamper is not None:
             timestamp = datetime.now().strftime("%Y/%m/%d %H:%M:%S")
@@ -69,18 +71,15 @@ class SelectionScreen(Screen):
 
             for name, checkbox in self.checkboxes:
                 if checkbox.active:
-                    match = self.ExcelList[
-                        (self.ExcelList["LastName"].str.strip().str.lower() == GlobalScreenManager.FAMILY_NAME.lower()) &
-                        (self.ExcelList["FirstName"].str.strip() == name)
-                    ]
-
-                    if not match.empty:
-                        row = match.iloc[0]
-                        sheet.append_row([
-                            str(row["FirstName"]),
-                            str(row["LastName"]),
-                            str(row["Passwords"]),
-                            timestamp
-                        ])
+                    for row in self.camperData:
+                        if (row.get("LastName", "").strip().lower() == GlobalScreenManager.FAMILY_NAME.lower() and
+                            row.get("FirstName", "").strip() == name):
+                            sheet.append_row([
+                                str(row.get("FirstName", "")),
+                                str(row.get("LastName", "")),
+                                str(row.get("Passwords", "")),
+                                timestamp
+                            ])
+                            break
 
         GSM().switchScreen("EOD")

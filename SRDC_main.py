@@ -38,7 +38,7 @@ class SRDCApp(MDApp):
         return self.sm
 
     def on_start(self):
-        GSM().switchScreen('login')
+        GSM().switchScreen('EOD')
 
 
 if __name__ == "__main__":
