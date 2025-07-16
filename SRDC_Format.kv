@@ -85,110 +85,126 @@
             MDList:
                 id: matchingLastNames
         
-        MDGridLayout:
-            id: EODKeyBoard
-            cols: 10
-            rows: 3
-            spacing: dp(10)
-            padding: dp(20)
+            # MDGridLayout:
+            #     id: EODKeyBoard
+            #     cols: 10
+            #     rows: 3
+            #     spacing: dp(10)
+            #     padding: dp(20)
 
-            size_hint: 1,None
-            height: self.minimum_height
-            pos_hint: {"y": 0.05}
+            #     size_hint: 1,None
+            #     height: self.minimum_height
+            #     pos_hint: {'center_x':.5, 'center_y':.1}
 
-            ############# First Row #############
-            MDRaisedButton:
-                text: "Q"
-                on_release: root.editText("q")
-            MDRaisedButton:
-                text: "W"
-                on_release: root.editText("w")
-            MDRaisedButton:
-                text: "E"
-                on_release: root.editText("e")
-            MDRaisedButton:
-                text: "R"
-                on_release: root.editText("r")
-            MDRaisedButton:
-                text: "T"
-                on_release: root.editText("r")
-            MDRaisedButton:
-                text: "Y"
-                on_release: root.editText("y")
-            MDRaisedButton:
-                text: "U"
-                on_release: root.editText("u")
-            MDRaisedButton:
-                text: "I"
-                on_release: root.editText("i")
-            MDRaisedButton:
-                text: "O"
-                on_release: root.editText("o")
-            MDRaisedButton:
-                text: "P"
-                on_release: root.editText("p")
-            ############# Second Row #############
-            MDRaisedButton:
-                text: "A"
-                on_release: root.editText("a")
-            MDRaisedButton:
-                text: "S"
-                on_release: root.editText("s")
-            MDRaisedButton:
-                text: "D"
-                on_release: root.editText("d")
-            MDRaisedButton:
-                text: "F"
-                on_release: root.editText("f")
-            MDRaisedButton:
-                text: "G"
-                on_release: root.editText("g")
-            MDRaisedButton:
-                text: "H"
-                on_release: root.editText("h")
-            MDRaisedButton:
-                text: "J"
-                on_release: root.editText("j")
-            MDRaisedButton:
-                text: "K"
-                on_release: root.editText("k")
-            MDRaisedButton:
-                text: "L"
-                on_release: root.editText("l")
-            MDRaisedButton:
-                text: "-"
-                on_release: root.editText("-")
-            ############# Third Row #############
-            MDRaisedButton:
-                text: "Z"
-                on_release: root.editText("z")
-            MDRaisedButton:
-                text: "X"
-                on_release: root.editText("x")
-            MDRaisedButton:
-                text: "C"
-                on_release: root.editText("c")
-            MDRaisedButton:
-                text: "V"
-                on_release: root.editText("v")
-            MDRaisedButton:
-                text: "B"
-                on_release: root.editText("b")
-            MDRaisedButton:
-                text: "N"
-                on_release: root.editText("n")
-            MDRaisedButton:
-                text: "M"
-                on_release: root.editText("m")
-            MDRaisedButton:
-                text: "Space"
-                on_release: root.editText("Space")
-            MDRaisedButton:
-                text: "Back"
-                on_release: root.editText("Back")
-            MDRaisedButton:
-                text: "Clear"
-                on_release: root.editText("Clear")
+        AnchorLayout:
+            anchor_x: "center"
+            anchor_y: "bottom"
+            size_hint: 1, None
+            height: self.children[0].height + dp(40)  # adjust for padding
+            padding: 0, dp(20)
+
+            MDGridLayout:
+                id: EODKeyBoard
+                cols: 10
+                spacing: dp(10)
+                padding: dp(10)
+                size_hint: None, None
+                width: self.minimum_width
+                height: self.minimum_height
+
+                ############# First Row #############
+                MDRaisedButton:
+                    text: "Q"
+                    on_release: root.editText("q")
+                MDRaisedButton:
+                    text: "W"
+                    on_release: root.editText("w")
+                MDRaisedButton:
+                    text: "E"
+                    on_release: root.editText("e")
+                MDRaisedButton:
+                    text: "R"
+                    on_release: root.editText("r")
+                MDRaisedButton:
+                    text: "T"
+                    on_release: root.editText("r")
+                MDRaisedButton:
+                    text: "Y"
+                    on_release: root.editText("y")
+                MDRaisedButton:
+                    text: "U"
+                    on_release: root.editText("u")
+                MDRaisedButton:
+                    text: "I"
+                    on_release: root.editText("i")
+                MDRaisedButton:
+                    text: "O"
+                    on_release: root.editText("o")
+                MDRaisedButton:
+                    text: "P"
+                    on_release: root.editText("p")
+                ############# Second Row #############
+                MDRaisedButton:
+                    text: "A"
+                    on_release: root.editText("a")
+                MDRaisedButton:
+                    text: "S"
+                    on_release: root.editText("s")
+                MDRaisedButton:
+                    text: "D"
+                    on_release: root.editText("d")
+                MDRaisedButton:
+                    text: "F"
+                    on_release: root.editText("f")
+                MDRaisedButton:
+                    text: "G"
+                    on_release: root.editText("g")
+                MDRaisedButton:
+                    text: "H"
+                    on_release: root.editText("h")
+                MDRaisedButton:
+                    text: "J"
+                    on_release: root.editText("j")
+                MDRaisedButton:
+                    text: "K"
+                    on_release: root.editText("k")
+                MDRaisedButton:
+                    text: "L"
+                    on_release: root.editText("l")
+                MDRaisedButton:
+                    text: "-"
+                    on_release: root.editText("-")
+                ############# Third Row #############
+                MDRaisedButton:
+                    text: "Z"
+                    on_release: root.editText("z")
+                MDRaisedButton:
+                    text: "X"
+                    on_release: root.editText("x")
+                MDRaisedButton:
+                    text: "C"
+                    on_release: root.editText("c")
+                MDRaisedButton:
+                    text: "V"
+                    on_release: root.editText("v")
+                MDRaisedButton:
+                    text: "B"
+                    on_release: root.editText("b")
+                MDRaisedButton:
+                    text: "N"
+                    on_release: root.editText("n")
+                MDRaisedButton:
+                    text: "M"
+                    on_release: root.editText("m")
+                MDRaisedButton:
+                    text: "Space"
+                    on_release: root.editText("Space")
+                MDRaisedButton:
+                    text: "Back"
+                    on_release: root.editText("Back")
+                MDRaisedButton:
+                    text: "Clear"
+                    on_release: root.editText("Clear")
 
 
 <SelectionScreen>:
