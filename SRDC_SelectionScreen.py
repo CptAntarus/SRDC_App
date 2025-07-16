@@ -1,4 +1,5 @@
 import gspread
+from kivymd.app import MDApp
 from datetime import datetime
 from kivymd.uix.list import OneLineAvatarIconListItem, IRightBodyTouch
 from kivymd.uix.selectioncontrol import MDCheckbox
@@ -18,12 +19,7 @@ class SelectionScreen(Screen):
 
 
     def delayedInit(self, dt):
-        scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-        creds = ServiceAccountCredentials.from_json_keyfile_name("SRDCPasswords.json", scope)
-        client = gspread.authorize(creds)
-
-        sheet = client.open("SRDCPasswords").sheet1
-        self.camperData = sheet.get_all_records()
+        self.data = MDApp.get_running_app().sheetData
 
         self.ids.familyName.text = GlobalScreenManager.FAMILY_NAME
         self.ids.familyPassword.text = GlobalScreenManager.FAMILY_PASSWORD
@@ -36,7 +32,7 @@ class SelectionScreen(Screen):
         self.checkboxes = []
 
         # Create simlified list of first names
-        for row in self.camperData:
+        for row in self.data:
             tempLName = str(row.get("LastName", "")).strip().lower()
             if tempLName.lower() == GlobalScreenManager.FAMILY_NAME.lower():
                 firstName = str(row.get("FirstName", "")).strip()
@@ -60,7 +56,7 @@ class SelectionScreen(Screen):
     # Push Name&Password to GoogleDoc
     def addToList(self):
         if self.selectedCamper is not None:
-            timestamp = datetime.now().strftime("%Y/%m/%d %H:%M:%S")
+            timestamp = datetime.now().strftime("%m/%d/%Y %H:%M:%S")
 
             # Google Sheets API setup
             scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
@@ -72,7 +68,7 @@ class SelectionScreen(Screen):
 
             for name, checkbox in self.checkboxes:
                 if checkbox.active:
-                    for row in self.camperData:
+                    for row in self.data:
                         if (row.get("LastName", "").strip().lower() == GlobalScreenManager.FAMILY_NAME.lower() and
                             row.get("FirstName", "").strip() == name):
                             sheet.append_row([
