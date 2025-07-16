@@ -1,8 +1,9 @@
-import gspread
-from oauth2client.service_account import ServiceAccountCredentials
+from kivymd.app import MDApp
+# from oauth2client.service_account import ServiceAccountCredentials
 from kivymd.uix.list import OneLineListItem
 from kivy.uix.screenmanager import Screen
 from kivy.clock import Clock
+
 from SRDC_GSM import GlobalScreenManager, GSM
 
 class EODScreen(Screen):
@@ -10,17 +11,7 @@ class EODScreen(Screen):
         Clock.schedule_once(self.delayed_init,0.1)
 
     def delayed_init(self,dt):
-        scope = [
-            "https://spreadsheets.google.com/feeds",
-            "https://www.googleapis.com/auth/drive"
-        ]
-
-        creds = ServiceAccountCredentials.from_json_keyfile_name("SRDCPasswords.json", scope)
-        client = gspread.authorize(creds)
-
-        sheet = client.open("SRDCPasswords").sheet1
-
-        self.sheetData = sheet.get_all_records()
+        self.data = MDApp.get_running_app().sheetData
 
         self.matchingLastNames = self.ids.matchingLastNames
         self.ids.nameInput.bind(text=self.onTextSearch)
@@ -40,7 +31,7 @@ class EODScreen(Screen):
         container.clear_widgets()
         addedNames = set()
 
-        for row in self.sheetData:
+        for row in self.data:
             name = str(row.get("LastName", "")).strip()
             if searchText.lower() in name.lower() and name.lower() not in addedNames:
                 item = OneLineListItem(text=name)
@@ -54,12 +45,27 @@ class EODScreen(Screen):
         else:
             userInput = self.ids.nameInput.text.strip().lower()
 
-        for row in self.sheetData:
+        for row in self.data:
             if str(row.get('LastName', "")).strip().lower() == userInput.lower():
                 familyPassword = str(row.get('Passwords',""))
                 self.changeScreen(familyName,familyPassword)
                 break
     
+
+    def editText(self, character):
+        inputField = self.ids.nameInput
+
+        if character == "Space":
+            inputField.text += " "
+        elif character == "Back":
+            inputField.text = inputField.text[:-1]
+        elif character == "Clear":
+            inputField.text = ""
+        else:
+            inputField.text += character
+
+
+
     def changeScreen(self, familyName, familypassword):
         GlobalScreenManager.FAMILY_NAME = familyName.strip()
         GlobalScreenManager.FAMILY_PASSWORD = familypassword.strip()
