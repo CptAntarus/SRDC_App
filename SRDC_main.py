@@ -6,6 +6,11 @@
 #
 ###################################################################
 
+# Standard Imports
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
+
+
 # KivyMD Imports
 from kivymd.app import MDApp
 
@@ -34,13 +39,29 @@ class SRDCApp(MDApp):
         self.sm.add_widget(EditThemeScreen(name='editThemeScreen'))
 
         self.theme_cls.theme_style = "Dark"
-        self.theme_cls.primary_palette = "Blue" #"Cyan" #"Green"
+        self.theme_cls.primary_palette = "Blue"
         self.sm.transition = NoTransition()
 
         return self.sm
 
     def on_start(self):
+        self.GenNamePasswordList()
         GSM().switchScreen('home')
+
+
+    def GenNamePasswordList(self):
+        scope = [
+            "https://spreadsheets.google.com/feeds",
+            "https://www.googleapis.com/auth/drive"
+        ]
+
+        creds = ServiceAccountCredentials.from_json_keyfile_name("SRDCPasswords.json", scope)
+        client = gspread.authorize(creds)
+
+        sheet = client.open("SRDCPasswords").sheet1
+
+        self.sheetData = sheet.get_all_records()
+
 
 
 if __name__ == "__main__":
