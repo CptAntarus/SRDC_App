@@ -63,7 +63,7 @@ class SelectionScreen(Screen):
 
             # Google Sheets API setup
             scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-            creds = ServiceAccountCredentials.from_json_keyfile_name("C:\VS_Code\Python\Kivy_Testing\creds.json", scope)
+            creds = ServiceAccountCredentials.from_json_keyfile_name("creds.json", scope)
             client = gspread.authorize(creds)
 
             # Open the spreadsheet and sheet
