@@ -7,15 +7,15 @@ venv/
 KivEnv/
 
 # Secrets
-creds.json
-SRDCPasswords.json
+SRDC_Creds.json
+DEPRICATED_creds.json
 SRDCPasswords.xlsx
-SignedOutCampers.xlsx
 
 # Scratch/test files
 test.py
 test.kv
 Kivy_icons.py
+ImageFixer.py
 
 
 # IDE config

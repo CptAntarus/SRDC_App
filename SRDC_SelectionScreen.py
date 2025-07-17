@@ -60,11 +60,11 @@ class SelectionScreen(Screen):
 
             # Google Sheets API setup
             scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-            creds = ServiceAccountCredentials.from_json_keyfile_name("C:\VS_Code\Python\Kivy_Testing\creds.json", scope)
+            creds = ServiceAccountCredentials.from_json_keyfile_name("C:\VS_Code\Python\Kivy_Testing\SRDC_Creds.json", scope)
             client = gspread.authorize(creds)
 
             # Open the spreadsheet and sheet
-            sheet = client.open("SignedOutCampers").worksheet("Campers")
+            sheet = client.open("SRDC_DB").worksheet("EndOfDay")
 
             for name, checkbox in self.checkboxes:
                 if checkbox.active:

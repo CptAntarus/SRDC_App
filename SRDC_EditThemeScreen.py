@@ -40,7 +40,3 @@ class EditThemeScreen(Screen):
 
     def changeColor(self, newColor):
         MDApp.get_running_app().theme_cls.primary_palette = newColor
-
-    def changePicture(self, newPicture):
-        source = MDApp.get_running_app().root.get_screen("home")
-        source.ids.HomeScreenPicture.source = newPicture
