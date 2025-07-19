@@ -64,7 +64,7 @@ class SRDCApp(MDApp):
         ]
         # creds = ServiceAccountCredentials.from_json_keyfile_name("C:\VS_Code\Python\Kivy_Testing\SRDC_Creds.json", scope)
         creds_path = os.getenv("SRDC_CREDS_PATH")
-        print("Google Credentials Path:", os.getenv("SRDC_CREDS_PATH"))
+        
         if creds_path:
             creds = ServiceAccountCredentials.from_json_keyfile_name(creds_path, scope)
         else:
