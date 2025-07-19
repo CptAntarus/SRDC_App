@@ -1,4 +1,5 @@
 import gspread
+import os
 from kivymd.app import MDApp
 from datetime import datetime
 from kivymd.uix.list import OneLineAvatarIconListItem, IRightBodyTouch
@@ -60,7 +61,12 @@ class SelectionScreen(Screen):
 
             # Google Sheets API setup
             scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-            creds = ServiceAccountCredentials.from_json_keyfile_name("C:\VS_Code\Python\Kivy_Testing\SRDC_Creds.json", scope)
+            
+            creds_path = os.getenv("SRDC_CREDS_PATH")
+            if creds_path:
+                creds = ServiceAccountCredentials.from_json_keyfile_name(creds_path, scope)
+            else:
+                print("Google credentials path is not set!")
             client = gspread.authorize(creds)
 
             # Open the spreadsheet and sheet
