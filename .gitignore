@@ -11,6 +11,7 @@ SRDC.bat
 # Secrets
 SRDC_Creds.json
 SRDC.sh
+SRDC.bat
 
 # Scratch/test files
 OtherStuff
