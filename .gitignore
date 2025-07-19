@@ -6,6 +6,9 @@ __pycache__/
 venv/
 KivEnv/
 
+# Localized Script
+SRDC.bat
+
 # Secrets
 SRDC_Creds.json
 DEPRICATED_creds.json
