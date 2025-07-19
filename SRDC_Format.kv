@@ -1,54 +1,70 @@
-<LoginScreen>:
-    MDBoxLayout:
-        orientation: 'vertical'
-        size_hint_y: 0.6
-        pos_hint: {"center_y": 0.4}
+###################################################################
+#
+#       - File: SRDC_Format.kv
+#       - Author: Dylan Hendrix
+#       - Discription: Controls the structure of the app
+#
+###################################################################
 
-        MDTextField:
-            id: nameInput
-            hint_text: "Name:"
-            multiline: False
-            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-            size_hint_x: 0.5
+################################# DEPRICATED ###################################
+# <LoginScreen>:
+#     MDBoxLayout:
+#         orientation: 'vertical'
+#         size_hint_y: 0.6
+#         pos_hint: {"center_y": 0.4}
 
-        MDTextField:
-            id: passwordInput
-            hint_text: "Password:"
-            multiline: False
-            password: True
-            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-            size_hint_x: 0.5
+#         MDTextField:
+#             id: nameInput
+#             hint_text: "Name:"
+#             multiline: False
+#             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+#             size_hint_x: 0.5
 
-        AnchorLayout:
-            size_hint_y: 0.2
-            MDRaisedButton:
-                text: "Login"
-                size_hint: None, None
-                size: 150, 50
-                on_release: root.validateCreds(nameInput.text, passwordInput.text)
+#         MDTextField:
+#             id: passwordInput
+#             hint_text: "Password:"
+#             multiline: False
+#             password: True
+#             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+#             size_hint_x: 0.5
+
+#         AnchorLayout:
+#             size_hint_y: 0.2
+#             MDRaisedButton:
+#                 text: "Login"
+#                 size_hint: None, None
+#                 size: 150, 50
+#                 on_release: root.validateCreds(nameInput.text, passwordInput.text)
+################################# DEPRICATED ###################################
 
 
 
 <HomeScreen>:
     MDTopAppBar:
-        left_action_items: [["arrow-left", lambda y: app.root.backButton(y)]]
         right_action_items: [["cog", lambda x: app.root.switchScreen('editThemeScreen')]]
         pos_hint: {"top": 1}
 
     FloatLayout:
         MDRaisedButton:
+            id: ExtCareButton
+            text: "Ext Morning"
+            size_hint: None,None
+            pos_hint: {"center_x":.75, "center_y":.65}
+            on_release: app.root.switchScreen('extMorning')
+
+        MDRaisedButton:
             id: EODButton
             text: "End Of Day Sign Out"
             size_hint: None,None
-            pos_hint: {"center_x":.7, "center_y":.65}
+            pos_hint: {"center_x":.75, "center_y":.5}
             on_release: app.root.switchScreen('EOD')
 
         MDRaisedButton:
             id: ExtCareButton
-            text: "Extended Care"
+            text: "Ext Afternoon"
             size_hint: None,None
-            pos_hint: {"center_x":.7, "center_y":.35}
-            on_release:
+            pos_hint: {"center_x":.75, "center_y":.35}
+            on_release: app.root.switchScreen('extAfternoon')
 
         Image:
             id: HomeScreenPicture
@@ -58,7 +74,7 @@
             size: dp(300), dp(300) #dp(350), dp(350) For the funnies
             allow_stretch: True
             keep_ratio: True
-            pos_hint: {"center_x": 0.25, "center_y":.3}
+            pos_hint: {"center_x":.3, "center_y":.4}
 
 
 
@@ -68,7 +84,6 @@
         left_action_items: [["arrow-left", lambda y: app.root.backButton(y)]]
         right_action_items: [["home", lambda x: app.root.switchScreen('home')]]
         pos_hint: {"top": 1}
-
 
     MDFloatLayout:
         MDTextField:
@@ -123,7 +138,7 @@
                 MDRaisedButton:
                     text: "T"
                     font_size: "28sp"
-                    on_release: root.editText("r")
+                    on_release: root.editText("t")
                 MDRaisedButton:
                     text: "Y"
                     font_size: "28sp"
@@ -237,6 +252,7 @@
             size_hint: .2,.2
             pos_hint: {"center_x":.15,"center_y":.85}
             text: "Last Name:"
+
         MDLabel:
             id: familyName
             size_hint: .2,.2
@@ -247,8 +263,9 @@
             size_hint: .2,.2
             pos_hint: {"center_x":.15,"center_y":.8}
             text: "Password:"
+
         MDLabel:
-            id: familyPassword  # Add pswd in .py
+            id: familyPassword
             size_hint: .2,.2
             pos_hint: {"center_x":.3,"center_y":.8}
             text: ""
@@ -280,7 +297,6 @@
             on_release: root.addToList()
 
 
-
 <EditThemeScreen>:
     MDTopAppBar:
         left_action_items: [["arrow-left", lambda y: app.root.backButton(y)]]
@@ -288,13 +304,6 @@
         pos_hint: {"top": 1}
 
     MDFloatLayout:
-        MDIconButton:
-            id: LightDarkBtn
-            icon: "white-balance-sunny" #"theme-light-dark"
-            pos_hint: {"center_x":.8, "center_y":.7}
-            on_release: root.toggleLightDark()
-        
-        
         MDRaisedButton:
             id: hiddenBtn
             opacity: 0
@@ -302,14 +311,16 @@
             pos_hint:{"center_x":.95, "center_y":.05}
             on_release: app.root.switchScreen('photoScreen')
 
-    MDGridLayout:
-        id: colorGrid
-        cols: 5
-        spacing: "10dp"
-        padding: "20dp"
-        adaptive_height: True
-        size_hint_y: None
-        pos_hint: {"center_x": 0.65, "center_y": 0.4}
+        MDGridLayout:
+            id: colorGrid
+            cols: 5
+            spacing: "10dp"
+            padding: "20dp"
+            adaptive_height: True
+            size_hint: None,None
+            size: self.minimum_size
+            pos_hint: {"center_x": 0.5, "center_y": 0.5}
+
 
 <PhotoScreen>:
     MDTopAppBar:
@@ -319,6 +330,7 @@
 
     MDGridLayout:
         cols: 3
+        id: photoGrid
         spacing: dp(30)
         padding: dp(10)
         pos_hint: {"center_x": 0.5, "center_y": 0.5}
@@ -327,26 +339,33 @@
         height: self.minimum_height
         adaptive_size: True
 
-        MDRaisedButton:
-            text: "SRDC Logo"
-            on_release: root.changePicture("images/SRDC_Logo.png")
 
-        MDRaisedButton:
-            text: "Taylor"
-            on_release: root.changePicture("images/Taylor.jpg")
+<ExtMorning>:
+    MDTopAppBar:
+        title: "Camper Signout"
+        left_action_items: [["arrow-left", lambda y: app.root.backButton(y)]]
+        right_action_items: [["home", lambda x: app.root.switchScreen('home')]]
+        pos_hint: {"top": 1}
 
-        MDRaisedButton:
-            text: "Princes Marge"
-            on_release: root.changePicture("images/Marge.jpg")
-        
-        MDRaisedButton:
-            text: "TheCrizzler"
-            on_release: root.changePicture("images/TheCrizzler.jfif")
+    MDFloatLayout:
+        MDLabel:
+            size_hint: None,None
+            halign: "center"
+            width: dp(300)
+            pos_hint: {"center_x":.5,"center_y":.5}
+            text: "Page Under Construction\n   Check back soon :)"
 
-        MDRaisedButton:
-            text: "TheCrizzler2"
-            on_release: root.changePicture("images/TheCrizzler2.jpg")
+<ExtAfternoon>:
+    MDTopAppBar:
+        title: "Camper Signout"
+        left_action_items: [["arrow-left", lambda y: app.root.backButton(y)]]
+        right_action_items: [["home", lambda x: app.root.switchScreen('home')]]
+        pos_hint: {"top": 1}
 
-        MDRaisedButton:
-            text: "TheCrizzler3"
-            on_release: root.changePicture("images/TheCrizzler3.jpg")
+    MDFloatLayout:
+        MDLabel:
+            size_hint: None,None
+            halign: "center"
+            width: dp(300)
+            pos_hint: {"center_x":.5,"center_y":.5}
+            text: "Page Under Construction\n   Check back soon :)"

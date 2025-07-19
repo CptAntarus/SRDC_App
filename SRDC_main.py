@@ -8,6 +8,7 @@
 
 # Standard Imports
 import gspread
+import os
 from oauth2client.service_account import ServiceAccountCredentials
 
 
@@ -20,25 +21,30 @@ from kivy.uix.screenmanager import NoTransition
 
 # Import Screens
 from SRDC_GSM import GlobalScreenManager, GSM
-from SRDC_LoginScreen import LoginScreen
+#from SRDC_LoginScreen import LoginScreen
 from SRDC_HomeScreen import HomeScreen
 from SRDC_EODScreen import EODScreen
 from SRDC_SelectionScreen import SelectionScreen
 from SRDC_EditThemeScreen import EditThemeScreen
 from SRDC_PhotoScreen import PhotoScreen
+from SRDC_ExtMorning import ExtMorning
+from SRDC_ExtAfternoon import ExtAfternoon
 
-Builder.load_file("SRDC_Format.kv") # ABS PATH: C:/VS_Code/Python/Kivy_Testing/
+
+Builder.load_file("SRDC_Format.kv")
 
 # Init the screens
 class SRDCApp(MDApp):
     def build(self):
         self.sm = GlobalScreenManager()
-        self.sm.add_widget(LoginScreen(name='login'))
+        #self.sm.add_widget(LoginScreen(name='login'))
         self.sm.add_widget(HomeScreen(name='home'))
         self.sm.add_widget(EODScreen(name='EOD'))
         self.sm.add_widget(SelectionScreen(name='selectionScreen'))
         self.sm.add_widget(EditThemeScreen(name='editThemeScreen'))
         self.sm.add_widget(PhotoScreen(name='photoScreen'))
+        self.sm.add_widget(ExtMorning(name='extMorning'))
+        self.sm.add_widget(ExtAfternoon(name='extAfternoon'))
 
         self.theme_cls.theme_style = "Dark"
         self.theme_cls.primary_palette = "Blue"
@@ -56,8 +62,13 @@ class SRDCApp(MDApp):
             "https://spreadsheets.google.com/feeds",
             "https://www.googleapis.com/auth/drive"
         ]
-
-        creds = ServiceAccountCredentials.from_json_keyfile_name("C:\VS_Code\Python\Kivy_Testing\SRDC_Creds.json", scope)
+        # creds = ServiceAccountCredentials.from_json_keyfile_name("C:\VS_Code\Python\Kivy_Testing\SRDC_Creds.json", scope)
+        creds_path = os.getenv("SRDC_CREDS_PATH")
+        print("Google Credentials Path:", os.getenv("SRDC_CREDS_PATH"))
+        if creds_path:
+            creds = ServiceAccountCredentials.from_json_keyfile_name(creds_path, scope)
+        else:
+            print("Google credentials path is not set!")
         client = gspread.authorize(creds)
 
         sheet = client.open("SRDC_DB").worksheet("Passwords")

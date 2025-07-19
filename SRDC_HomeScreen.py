@@ -7,4 +7,3 @@ class HomeScreen(Screen):   # EOD page, Extended Care,
     
     def on_enter(self):
         GlobalScreenManager.SCREEN_HIST.clear()
-        GlobalScreenManager.SCREEN_HIST.append("login")
