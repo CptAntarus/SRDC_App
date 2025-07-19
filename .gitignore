@@ -3,20 +3,14 @@ __pycache__/
 *.pyc
 
 # Virtual envs
-venv/
 KivEnv/
 
 # Secrets
 SRDC_Creds.json
-DEPRICATED_creds.json
-SRDCPasswords.xlsx
+SRDC.sh
 
 # Scratch/test files
-test.py
-test.kv
-Kivy_icons.py
-ImageFixer.py
-
+OtherStuff
 
 # IDE config
 .vscode/

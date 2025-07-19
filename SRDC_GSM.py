@@ -1,3 +1,11 @@
+###################################################################
+#
+#       - File: SRDC_GSM.py
+#       - Author: Dylan Hendrix
+#       - Discription: Contains Global variables and helper functions
+#                       
+###################################################################
+
 from kivymd.app import MDApp
 from kivy.uix.screenmanager import ScreenManager
 
@@ -6,14 +14,6 @@ class GlobalScreenManager(ScreenManager):
 
     FAMILY_NAME = ""
     FAMILY_PASSWORD = ""
-
-
-    VALID_USERS = {
-        "dylan"  : "7567",
-        "taylor" : "5555",
-        "april"  : "1409",
-        "beth"   : "0316"
-    }
     
     def switchScreen(self, newScren):
         GlobalScreenManager.SCREEN_HIST.append(self.current)
@@ -28,6 +28,7 @@ class GlobalScreenManager(ScreenManager):
         loginScreen = self.get_screen('login')
         loginScreen.ids.nameInput.text = ""
         loginScreen.ids.passwordInput.text = ""
+
 
 def GSM():
     return MDApp.get_running_app().root
