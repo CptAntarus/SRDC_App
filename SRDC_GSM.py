@@ -11,6 +11,8 @@ from kivy.uix.screenmanager import ScreenManager
 
 class GlobalScreenManager(ScreenManager):
     SCREEN_HIST = []
+    SCREEN_FLAG = ""
+    AfternoonListUpToDate = False
 
     FAMILY_NAME = ""
     FAMILY_PASSWORD = ""

@@ -38,7 +38,6 @@
 ################################# DEPRICATED ###################################
 
 
-
 <HomeScreen>:
     MDTopAppBar:
         right_action_items: [["cog", lambda x: app.root.switchScreen('editThemeScreen')]]
@@ -46,25 +45,24 @@
 
     FloatLayout:
         MDRaisedButton:
-            id: ExtCareButton
+            id: MorningExtCareButton
             text: "Ext Morning"
             size_hint: None,None
             pos_hint: {"center_x":.75, "center_y":.65}
-            on_release: app.root.switchScreen('extMorning')
+            on_release: root.switchToExtCareMorning()
 
         MDRaisedButton:
             id: EODButton
             text: "End Of Day Sign Out"
             size_hint: None,None
             pos_hint: {"center_x":.75, "center_y":.5}
-            on_release: app.root.switchScreen('EOD')
+            on_release: root.switchToEOD()
 
         MDRaisedButton:
-            id: ExtCareButton
             text: "Ext Afternoon"
             size_hint: None,None
             pos_hint: {"center_x":.75, "center_y":.35}
-            on_release: app.root.switchScreen('extAfternoon')
+            on_release: root.openMenu(self)
 
         Image:
             id: HomeScreenPicture
@@ -77,10 +75,10 @@
             pos_hint: {"center_x":.3, "center_y":.4}
 
 
-
-<EODScreen>:
+<SearchScreen>:
     MDTopAppBar:
-        title: "Camper Signout"
+        id: selectionScreenTopBar
+        title: ""
         left_action_items: [["arrow-left", lambda y: app.root.backButton(y)]]
         right_action_items: [["home", lambda x: app.root.switchScreen('home')]]
         pos_hint: {"top": 1}
@@ -91,7 +89,7 @@
             focus: True
             hint_text: "Enter Lastname:"
             helper_text_mode: "on_focus"
-            icon_right: "death-star-variant" #account-search
+            icon_right: "" #account-search, death-star, death-star-variant, alphabet-aurebesh
             pos_hint: {'center_x':.5, 'center_y':.75}
             size_hint: .5,None
 
@@ -105,11 +103,11 @@
             anchor_x: "center"
             anchor_y: "bottom"
             size_hint: 1, None
-            height: self.children[0].height + dp(40)  # adjust for padding
+            height: self.children[0].height + dp(40)
             padding: 0, dp(20)
 
             MDGridLayout:
-                id: EODKeyBoard
+                id: SelectionKeyBoard
                 cols: 10
                 spacing: dp(30)
                 padding: dp(10)
@@ -117,127 +115,6 @@
                 width: self.minimum_width
                 height: self.minimum_height
                 adaptive_size: True
-
-                ############# First Row #############
-                MDRaisedButton:
-                    text: "Q"
-                    font_size: "28sp"
-                    on_release: root.editText("q")
-                MDRaisedButton:
-                    text: "W"
-                    font_size: "28sp"
-                    on_release: root.editText("w")
-                MDRaisedButton:
-                    text: "E"
-                    font_size: "28sp"
-                    on_release: root.editText("e")
-                MDRaisedButton:
-                    text: "R"
-                    font_size: "28sp"
-                    on_release: root.editText("r")
-                MDRaisedButton:
-                    text: "T"
-                    font_size: "28sp"
-                    on_release: root.editText("t")
-                MDRaisedButton:
-                    text: "Y"
-                    font_size: "28sp"
-                    on_release: root.editText("y")
-                MDRaisedButton:
-                    text: "U"
-                    font_size: "28sp"
-                    on_release: root.editText("u")
-                MDRaisedButton:
-                    text: "I"
-                    font_size: "28sp"
-                    on_release: root.editText("i")
-                MDRaisedButton:
-                    text: "O"
-                    font_size: "28sp"
-                    on_release: root.editText("o")
-                MDRaisedButton:
-                    text: "P"
-                    font_size: "28sp"
-                    on_release: root.editText("p")
-                ############# Second Row #############
-                MDRaisedButton:
-                    text: "A"
-                    font_size: "28sp"
-                    on_release: root.editText("a")
-                MDRaisedButton:
-                    text: "S"
-                    font_size: "28sp"
-                    on_release: root.editText("s")
-                MDRaisedButton:
-                    text: "D"
-                    font_size: "28sp"
-                    on_release: root.editText("d")
-                MDRaisedButton:
-                    text: "F"
-                    font_size: "28sp"
-                    on_release: root.editText("f")
-                MDRaisedButton:
-                    text: "G"
-                    font_size: "28sp"
-                    on_release: root.editText("g")
-                MDRaisedButton:
-                    text: "H"
-                    font_size: "28sp"
-                    on_release: root.editText("h")
-                MDRaisedButton:
-                    text: "J"
-                    font_size: "28sp"
-                    on_release: root.editText("j")
-                MDRaisedButton:
-                    text: "K"
-                    font_size: "28sp"
-                    on_release: root.editText("k")
-                MDRaisedButton:
-                    text: "L"
-                    font_size: "28sp"
-                    on_release: root.editText("l")
-                MDRaisedButton:
-                    text: "-"
-                    font_size: "28sp"
-                    on_release: root.editText("-")
-                ############# Third Row #############
-                MDRaisedButton:
-                    text: "Z"
-                    font_size: "28sp"
-                    on_release: root.editText("z")
-                MDRaisedButton:
-                    text: "X"
-                    font_size: "28sp"
-                    on_release: root.editText("x")
-                MDRaisedButton:
-                    text: "C"
-                    font_size: "28sp"
-                    on_release: root.editText("c")
-                MDRaisedButton:
-                    text: "V"
-                    font_size: "28sp"
-                    on_release: root.editText("v")
-                MDRaisedButton:
-                    text: "B"
-                    font_size: "28sp"
-                    on_release: root.editText("b")
-                MDRaisedButton:
-                    text: "N"
-                    font_size: "28sp"
-                    on_release: root.editText("n")
-                MDRaisedButton:
-                    text: "M"
-                    font_size: "28sp"
-                    on_release: root.editText("m")
-                MDRaisedButton:
-                    text: "Space"
-                    on_release: root.editText("Space")
-                MDRaisedButton:
-                    text: "Back"
-                    on_release: root.editText("Back")
-                MDRaisedButton:
-                    text: "Clear"
-                    on_release: root.editText("Clear")
 
 
 <SelectionScreen>:
@@ -342,7 +219,7 @@
 
 <ExtMorning>:
     MDTopAppBar:
-        title: "Camper Signout"
+        title: "Morning Ext Care"
         left_action_items: [["arrow-left", lambda y: app.root.backButton(y)]]
         right_action_items: [["home", lambda x: app.root.switchScreen('home')]]
         pos_hint: {"top": 1}
@@ -355,9 +232,10 @@
             pos_hint: {"center_x":.5,"center_y":.5}
             text: "Page Under Construction\n   Check back soon :)"
 
+
 <ExtAfternoon>:
     MDTopAppBar:
-        title: "Camper Signout"
+        title: "Afternoon Ext Care"
         left_action_items: [["arrow-left", lambda y: app.root.backButton(y)]]
         right_action_items: [["home", lambda x: app.root.switchScreen('home')]]
         pos_hint: {"top": 1}
