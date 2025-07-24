@@ -16,6 +16,8 @@ class SearchScreen(Screen):
         Clock.schedule_once(self.delayed_init,0.1)
 
     def delayed_init(self,dt):
+        self.ids.nameInput.text = ""
+        
         if not self.keyboardBuilt:
             grid = self.ids.SelectionKeyBoard
             keys = ["Q","W","E","R","T","Y","U","I","O","P",
@@ -55,7 +57,7 @@ class SearchScreen(Screen):
             self.data = MDApp.get_running_app().EODsheetData #ECMsheetData
             self.ids.selectionScreenTopBar.title = "Morning Ext Care"
             self.ids.nameInput.icon_right = "death-star"
-            
+
         if GlobalScreenManager.SCREEN_FLAG == "EOD":
             self.data = MDApp.get_running_app().EODsheetData
             self.ids.selectionScreenTopBar.title = "End Of Day Sign Out"
@@ -72,8 +74,6 @@ class SearchScreen(Screen):
 
         self.matchingLastNames = self.ids.matchingLastNames
         self.ids.nameInput.bind(text=self.onTextSearch)
-        self.matchingLastNames.clear_widgets()
-        self.ids.nameInput.text = ""
         self.matchingLastNames.clear_widgets()
         Clock.schedule_once(self.set_focus, 0.1)
 
