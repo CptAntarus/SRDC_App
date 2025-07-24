@@ -17,10 +17,17 @@ class SelectionScreen(Screen):
     def on_enter(self):
         Clock.schedule_once(self.delayedInit,0.1)
         self.ids.toggleAllBtn.text = "Select All"
+        print("SCREEN_FLAG: ", GlobalScreenManager.SCREEN_FLAG)
 
 
     def delayedInit(self, dt):
-        self.data = MDApp.get_running_app().sheetData
+        self.data = MDApp.get_running_app().EODsheetData
+        # if GlobalScreenManager.SCREEN_FLAG == "ECM":
+        #     self.data = MDApp.get_running_app().EODsheetData #ECMsheetData
+        # if GlobalScreenManager.SCREEN_FLAG == "EOD":
+        #     self.data = MDApp.get_running_app().EODsheetData
+        # if GlobalScreenManager.SCREEN_FLAG == "ECA":
+        #     self.data = MDApp.get_running_app().EODsheetData #ECAsheetData
 
         self.ids.familyName.text = GlobalScreenManager.FAMILY_NAME
         self.ids.familyPassword.text = GlobalScreenManager.FAMILY_PASSWORD
@@ -69,8 +76,16 @@ class SelectionScreen(Screen):
                 print("Google credentials path is not set!")
             client = gspread.authorize(creds)
 
-            # Open the spreadsheet and sheet
-            sheet = client.open("SRDC_DB").worksheet("EndOfDay")
+            # Select which sheet to push to
+            if GlobalScreenManager.SCREEN_FLAG == "ECM":
+                sheet = client.open("SRDC_DB").worksheet("ExtCareMorningLog")
+            if GlobalScreenManager.SCREEN_FLAG == "EOD":
+                sheet = client.open("SRDC_DB").worksheet("EndOfDayLog")
+            if GlobalScreenManager.SCREEN_FLAG == "ECAI":
+                sheet = client.open("SRDC_DB").worksheet("ExtCareAfternoonIn")
+                GlobalScreenManager.AfternoonListUpToDate = False
+            if GlobalScreenManager.SCREEN_FLAG == "ECAO":
+                sheet = client.open("SRDC_DB").worksheet("ExtCareAfternoonOut")
 
             for name, checkbox in self.checkboxes:
                 if checkbox.active:
@@ -78,11 +93,11 @@ class SelectionScreen(Screen):
                         if (row.get("LastName", "").strip().lower() == GlobalScreenManager.FAMILY_NAME.lower() and
                             row.get("FirstName", "").strip() == name):
                             sheet.append_row([
-                                str(row.get("FirstName", "")),
                                 str(row.get("LastName", "")),
+                                str(row.get("FirstName", "")),
                                 str(row.get("Passwords", "")),
                                 timestamp
                             ])
                             break
 
-        GSM().switchScreen("EOD")
+        GSM().switchScreen("searchScreen")
