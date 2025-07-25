@@ -9,7 +9,7 @@ KivEnv/
 SRDC.bat
 
 # Secrets
-SRDC_Creds.json
+*.json
 *.sh
 *.bat
 
