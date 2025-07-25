@@ -215,35 +215,3 @@
         width: self.minimum_width
         height: self.minimum_height
         adaptive_size: True
-
-
-<ExtMorning>:
-    MDTopAppBar:
-        title: "Morning Ext Care"
-        left_action_items: [["arrow-left", lambda y: app.root.backButton(y)]]
-        right_action_items: [["home", lambda x: app.root.switchScreen('home')]]
-        pos_hint: {"top": 1}
-
-    MDFloatLayout:
-        MDLabel:
-            size_hint: None,None
-            halign: "center"
-            width: dp(300)
-            pos_hint: {"center_x":.5,"center_y":.5}
-            text: "Page Under Construction\n   Check back soon :)"
-
-
-<ExtAfternoon>:
-    MDTopAppBar:
-        title: "Afternoon Ext Care"
-        left_action_items: [["arrow-left", lambda y: app.root.backButton(y)]]
-        right_action_items: [["home", lambda x: app.root.switchScreen('home')]]
-        pos_hint: {"top": 1}
-
-    MDFloatLayout:
-        MDLabel:
-            size_hint: None,None
-            halign: "center"
-            width: dp(300)
-            pos_hint: {"center_x":.5,"center_y":.5}
-            text: "Page Under Construction\n   Check back soon :)"

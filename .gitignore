@@ -10,7 +10,8 @@ KivEnv/
 *.sh
 *.bat
 
-# Scratch/test files
+# Folders
+Scripts
 OtherStuff
 
 # IDE config
