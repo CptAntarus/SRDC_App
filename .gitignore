@@ -6,9 +6,9 @@ __pycache__/
 KivEnv/
 
 # Secrets
-SRDC_Creds.json
-SRDC.sh
-SRDC.bat
+*.json
+*.sh
+*.bat
 
 # Scratch/test files
 OtherStuff

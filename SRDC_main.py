@@ -58,11 +58,7 @@ class SRDCApp(MDApp):
 
 
     def GenNamePasswordList(self):
-        scope = [
-            "https://spreadsheets.google.com/feeds",
-            "https://www.googleapis.com/auth/drive"
-        ]
-        # creds = ServiceAccountCredentials.from_json_keyfile_name("C:\VS_Code\Python\Kivy_Testing\SRDC_Creds.json", scope)
+        scope = ["https://spreadsheets.google.com/feeds","https://www.googleapis.com/auth/drive"]
         creds_path = os.getenv("SRDC_CREDS_PATH")
         
         if creds_path:
@@ -71,24 +67,12 @@ class SRDCApp(MDApp):
             print("Google credentials path is not set!")
         client = gspread.authorize(creds)
 
-        # print("Getting ECM Records")
-        # ECMsheet = client.open("SRDC_DB").worksheet("Passwords") #ExtCareMorningList
-        # self.ECMsheetData = ECMsheet.get_all_records()
-
         print("Getting EOD Records")
         EODsheet = client.open("SRDC_DB").worksheet("Passwords")
         self.EODsheetData = EODsheet.get_all_records()
 
-        # print("Getting ECA Records")
-        # ECAsheet = client.open("SRDC_DB").worksheet("Passwords") #ExtCareAfternoonList
-        # self.ECAsheetData = ECAsheet.get_all_records()
-
     def UpdateAfternoonList(self):
-        scope = [
-            "https://spreadsheets.google.com/feeds",
-            "https://www.googleapis.com/auth/drive"
-        ]
-        # creds = ServiceAccountCredentials.from_json_keyfile_name("C:\VS_Code\Python\Kivy_Testing\SRDC_Creds.json", scope)
+        scope = ["https://spreadsheets.google.com/feeds","https://www.googleapis.com/auth/drive"]
         creds_path = os.getenv("SRDC_CREDS_PATH")
         
         if creds_path:
