@@ -27,9 +27,6 @@ from SRDC_SearchScreen import SearchScreen
 from SRDC_SelectionScreen import SelectionScreen
 from SRDC_EditThemeScreen import EditThemeScreen
 from SRDC_PhotoScreen import PhotoScreen
-from SRDC_ExtMorning import ExtMorning
-from SRDC_ExtAfternoon import ExtAfternoon
-
 
 Builder.load_file("SRDC_Format.kv")
 
@@ -43,8 +40,6 @@ class SRDCApp(MDApp):
         self.sm.add_widget(SelectionScreen(name='selectionScreen'))
         self.sm.add_widget(EditThemeScreen(name='editThemeScreen'))
         self.sm.add_widget(PhotoScreen(name='photoScreen'))
-        self.sm.add_widget(ExtMorning(name='extMorning'))
-        self.sm.add_widget(ExtAfternoon(name='extAfternoon'))
 
         self.theme_cls.theme_style = "Dark"
         self.theme_cls.primary_palette = "Blue"
@@ -70,6 +65,7 @@ class SRDCApp(MDApp):
         print("Getting EOD Records")
         EODsheet = client.open("SRDC_DB").worksheet("Passwords")
         self.EODsheetData = EODsheet.get_all_records()
+
 
     def UpdateAfternoonList(self):
         scope = ["https://spreadsheets.google.com/feeds","https://www.googleapis.com/auth/drive"]
