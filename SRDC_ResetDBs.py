@@ -52,7 +52,7 @@ def main():
         header = logSheet.row_values(1) # Save the headers
         logSheet.clear()                # Clear the DB
         logSheet.insert_row(header, 1)  # Replace the headers
-        
+
         print(f"======== Done with {Log} ========\n")
 
     print("\n============== History Saved & Databases Cleaned ==============\n")

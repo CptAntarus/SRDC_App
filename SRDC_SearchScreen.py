@@ -8,10 +8,6 @@ from kivy.clock import Clock
 from SRDC_GSM import GlobalScreenManager, GSM
 
 class SearchScreen(Screen):
-    def __init__(self, **kw):
-        super().__init__(**kw)
-        self.keyboardBuilt = False
-
     def on_enter(self):
         Clock.schedule_once(self.delayed_init,0.1)
 
@@ -120,7 +116,6 @@ class SearchScreen(Screen):
             inputField.text = ""
         else:
             inputField.text += character
-
 
 
     def changeScreen(self, familyName, familypassword):
