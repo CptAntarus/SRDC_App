@@ -11,7 +11,6 @@ import gspread
 import os
 from oauth2client.service_account import ServiceAccountCredentials
 
-
 # KivyMD Imports
 from kivymd.app import MDApp
 
@@ -55,7 +54,7 @@ class SRDCApp(MDApp):
     def GenNamePasswordList(self):
         scope = ["https://spreadsheets.google.com/feeds","https://www.googleapis.com/auth/drive"]
         creds_path = os.getenv("SRDC_CREDS_PATH")
-        
+
         if creds_path:
             creds = ServiceAccountCredentials.from_json_keyfile_name(creds_path, scope)
         else:
@@ -70,7 +69,7 @@ class SRDCApp(MDApp):
     def UpdateAfternoonList(self):
         scope = ["https://spreadsheets.google.com/feeds","https://www.googleapis.com/auth/drive"]
         creds_path = os.getenv("SRDC_CREDS_PATH")
-        
+
         if creds_path:
             creds = ServiceAccountCredentials.from_json_keyfile_name(creds_path, scope)
         else:
