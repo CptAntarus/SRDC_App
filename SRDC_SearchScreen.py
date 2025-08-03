@@ -1,5 +1,4 @@
 from kivymd.app import MDApp
-# from oauth2client.service_account import ServiceAccountCredentials
 from kivymd.uix.button import MDRaisedButton
 from kivymd.uix.list import OneLineListItem
 from kivy.uix.screenmanager import Screen
@@ -8,35 +7,35 @@ from kivy.clock import Clock
 from SRDC_GSM import GlobalScreenManager, GSM
 
 class SearchScreen(Screen):
+    def __init__(self, **kw):
+        super().__init__(**kw)
+
+        grid = self.ids.SelectionKeyBoard
+        keys = ["Q","W","E","R","T","Y","U","I","O","P",
+                "A","S","D","F","G","H","J","K","L","-",
+                "Z","X","C","V","B","N","M"]
+        otherKeys = ["Space","Back","Clear"]
+
+        for text in keys:
+            btn = MDRaisedButton(
+                text=text,
+                font_size="28sp",
+                on_release= lambda btn, t=text: self.editText(t.lower())
+            )
+            grid.add_widget(btn)
+
+        for text in otherKeys:
+            btn = MDRaisedButton(
+                text=text,
+                on_release= lambda btn, t=text: self.editText(t)
+            )
+            grid.add_widget(btn)
+                        
     def on_enter(self):
         Clock.schedule_once(self.delayed_init,0.1)
 
     def delayed_init(self,dt):
         self.ids.nameInput.text = ""
-        
-        if not self.keyboardBuilt:
-            grid = self.ids.SelectionKeyBoard
-            keys = ["Q","W","E","R","T","Y","U","I","O","P",
-                    "A","S","D","F","G","H","J","K","L","-",
-                    "Z","X","C","V","B","N","M"]
-            otherKeys = ["Space","Back","Clear"]
-
-            for text in keys:
-                btn = MDRaisedButton(
-                    text=text,
-                    font_size="28sp",
-                    on_release= lambda btn, t=text: self.editText(t.lower())
-                )
-                grid.add_widget(btn)
-
-            for text in otherKeys:
-                btn = MDRaisedButton(
-                    text=text,
-                    on_release= lambda btn, t=text: self.editText(t)
-                )
-                grid.add_widget(btn)
-            
-            self.keyboardBuilt = True
         
         # If the afternoonIn list is out of date update it
         if not GlobalScreenManager.AfternoonListUpToDate:
@@ -45,8 +44,8 @@ class SearchScreen(Screen):
         
         ##################################################
         #
-        # - Can adjust the lists later if needed
-        # - Currently using one DB for names/passwords
+        # - Set source Database, and text prompts
+        #    based on which functionality selected
         #
         ##################################################
         if GlobalScreenManager.SCREEN_FLAG == "ECM":
