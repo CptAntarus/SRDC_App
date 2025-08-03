@@ -77,27 +77,39 @@ class SelectionScreen(Screen):
             client = gspread.authorize(creds)
 
             # Select which sheet to push to
+            sheet = None
+
             if GlobalScreenManager.SCREEN_FLAG == "ECM":
                 sheet = client.open("SRDC_DB").worksheet("ExtCareMorningLog")
-            if GlobalScreenManager.SCREEN_FLAG == "EOD":
+            elif GlobalScreenManager.SCREEN_FLAG == "EOD":
                 sheet = client.open("SRDC_DB").worksheet("EndOfDayLog")
-            if GlobalScreenManager.SCREEN_FLAG == "ECAI":
+            elif GlobalScreenManager.SCREEN_FLAG == "ECAI":
                 sheet = client.open("SRDC_DB").worksheet("ExtCareAfternoonIn")
                 GlobalScreenManager.AfternoonListUpToDate = False
-            if GlobalScreenManager.SCREEN_FLAG == "ECAO":
+            elif GlobalScreenManager.SCREEN_FLAG == "ECAO":
                 sheet = client.open("SRDC_DB").worksheet("ExtCareAfternoonOut")
-
+            if sheet is None:
+                print("Error Selecting Destination Sheet")
+                return
+            
+            dataPackage = []
             for name, checkbox in self.checkboxes:
                 if checkbox.active:
                     for row in self.data:
                         if (row.get("LastName", "").strip().lower() == GlobalScreenManager.FAMILY_NAME.lower() and
                             row.get("FirstName", "").strip() == name):
-                            sheet.append_row([
+                            dataPackage.append([
                                 str(row.get("LastName", "")),
                                 str(row.get("FirstName", "")),
                                 str(row.get("Passwords", "")),
                                 timestamp
                             ])
                             break
+
+            if dataPackage:
+                startRow = len(sheet.get_all_values()) + 1
+                endRow = startRow + len(dataPackage) - 1
+                rangeToUpdate = f"A{startRow}:D{endRow}"
+                sheet.update(dataPackage, rangeToUpdate)
 
         GSM().switchScreen("searchScreen")
