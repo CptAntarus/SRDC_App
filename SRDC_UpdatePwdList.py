@@ -13,7 +13,7 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
 def main():
-    directory_path = "C:\VS_Code\Python\Kivy_Testing\OtherStuff"  # Update with your directory path
+    directory_path = r"C:\Users\SRDC_\OneDrive\Documents\VS_Code\Python\SRDC_App\OtherStuff"  # Update with your directory path
     newest_file = get_newest_file(directory_path)
 
     excelPath = os.path.join(directory_path, newest_file)
@@ -37,6 +37,57 @@ def main():
     # Delete Bad Values
     lastNames_cleaned = lastNames[~lastNames['combined'].str.contains(pattern)]
     lastNames_cleaned = lastNames_cleaned.drop(columns=['combined'])
+
+    print("Cleaning last names...")
+
+    # Define common suffixes to remove
+    suffixes = {'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'}
+
+    def clean_last_name(name):
+        parts = name.strip().split()
+        # Remove the suffix if it's the last word and in the suffix list
+        if parts and parts[-1].upper() in suffixes:
+            parts = parts[:-1]
+        return ' '.join(parts)
+
+    # Clean the last name column (assumes it's column 0)
+    lastNames_cleaned.iloc[:, 0] = lastNames_cleaned.iloc[:, 0].apply(clean_last_name)
+
+
+    # Get how many unique passwords exist for each last name
+    password_groups = (
+        lastNames_cleaned
+        .groupby(lastNames_cleaned.columns[0])[lastNames_cleaned.columns[2]]
+        .nunique()
+    )
+
+    # Build a mapping: (last_name, password) -> tag
+    tag_map = {}
+    counters = {}
+
+    for _, row in (
+        lastNames_cleaned.groupby([lastNames_cleaned.columns[0], lastNames_cleaned.columns[2]]).size().reset_index(name='count')
+    ).iterrows():
+        last_name = row.iloc[0]
+        password = row.iloc[1]
+
+        # Only tag if this last name has more than 1 unique password (i.e., multiple families)
+        if password_groups[last_name] > 1:
+            if last_name not in counters:
+                counters[last_name] = 1
+            else:
+                counters[last_name] += 1
+            tag_map[(last_name, password)] = f"{last_name} {counters[last_name]}"
+        else:
+            tag_map[(last_name, password)] = last_name
+
+    # Apply the tag based on the last name + password
+    def tag_row(row):
+        last_name = row.iloc[0]
+        password = row.iloc[2]
+        return tag_map.get((last_name, password), last_name)
+
+    lastNames_cleaned.iloc[:, 0] = lastNames_cleaned.apply(tag_row, axis=1)
 
     headers = lastNames_cleaned.columns.tolist()
     package = [headers] + lastNames_cleaned.values.tolist()
@@ -62,6 +113,7 @@ def main():
     passwordSheet.update(package, blockToUpdate)
 
     print("\n============== Passwords Updated In Google Sheet ==============\n")
+
 
 def get_newest_file(directory_path):
 
